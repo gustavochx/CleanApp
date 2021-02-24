@@ -24,3 +24,10 @@ public struct AddAccountModel: Encodable {
         self.passwordConfirmation = confirmationPassword
     }
 }
+
+extension AddAccountModel {
+
+    public func toData() -> Data? {
+        return try? JSONEncoder().encode(self)
+    }
+}
