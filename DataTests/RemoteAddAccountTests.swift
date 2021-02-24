@@ -36,9 +36,7 @@ class RemoteAddAccountTests: XCTestCase {
     func test_add_should_call_httpClient_with_correct_url() {
 
         let url = URL(string: String("http://any-url.com"))!
-
         let (sutRemoteAddAccount,httpClientSpy) = makeSut(url: url)
-
         sutRemoteAddAccount.add(addAcountModel: makeAddAccountModel())
         XCTAssertEqual(httpClientSpy.url, url)
     }
@@ -46,9 +44,7 @@ class RemoteAddAccountTests: XCTestCase {
     func test_add_should_call_httpClient_with_correct_data() {
 
         let (sutRemoteAddAccount,httpClientSpy) = makeSut()
-
         let stubAddAccountModel = makeAddAccountModel()
-
         sutRemoteAddAccount.add(addAcountModel: stubAddAccountModel)
         XCTAssertEqual(httpClientSpy.data, stubAddAccountModel.toData())
     }
