@@ -7,13 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2B55260F25E5D79F00323440 /* Domain.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B55260D25E5D79F00323440 /* Domain.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2B55261625E5D90E00323440 /* AddAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B55261525E5D90E00323440 /* AddAccount.swift */; };
+		2B55261925E5D95100323440 /* AccountModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B55261825E5D95100323440 /* AccountModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2B55260B25E5D79F00323440 /* Domain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Domain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		2B55260D25E5D79F00323440 /* Domain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Domain.h; sourceTree = "<group>"; };
 		2B55260E25E5D79F00323440 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2B55261525E5D90E00323440 /* AddAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAccount.swift; sourceTree = "<group>"; };
+		2B55261825E5D95100323440 /* AccountModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,7 +48,8 @@
 		2B55260C25E5D79F00323440 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
-				2B55260D25E5D79F00323440 /* Domain.h */,
+				2B55261525E5D90E00323440 /* AddAccount.swift */,
+				2B55261825E5D95100323440 /* AccountModel.swift */,
 				2B55260E25E5D79F00323440 /* Info.plist */,
 			);
 			path = Domain;
@@ -59,7 +62,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2B55260F25E5D79F00323440 /* Domain.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,6 +97,7 @@
 				TargetAttributes = {
 					2B55260A25E5D79F00323440 = {
 						CreatedOnToolsVersion = 12.4;
+						LastSwiftMigration = 1240;
 					};
 				};
 			};
@@ -131,6 +134,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2B55261625E5D90E00323440 /* AddAccount.swift in Sources */,
+				2B55261925E5D95100323440 /* AccountModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -256,6 +261,7 @@
 		2B55261125E5D79F00323440 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -275,6 +281,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -284,6 +291,7 @@
 		2B55261225E5D79F00323440 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
