@@ -39,8 +39,12 @@ class RemoteAddAccountTests: XCTestCase {
         XCTAssertEqual(httpClientSpy.url, url)
     }
 
-    class HttpClientSpy: HttpPostClient {
 
+}
+
+extension RemoteAddAccountTests {
+
+    class HttpClientSpy: HttpPostClient {
         var url: URL?
 
         func post(url: URL) {
