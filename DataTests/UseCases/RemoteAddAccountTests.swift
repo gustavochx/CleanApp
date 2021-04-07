@@ -13,13 +13,11 @@ class RemoteAddAccountTests: XCTestCase {
 
     func test_add_should_call_httpClient_with_correct_url() {
 
-        let url = URL(string: String("http://any-url.com"))!
+        let url = makeUrl()
+
         let (sutRemoteAddAccount,httpClientSpy) = makeSut(url: url)
-        
         sutRemoteAddAccount.add(addAcountModel: makeAddAccountModel()) { _ in
-
         }
-
         XCTAssertEqual(httpClientSpy.urls, [url])
     }
 
@@ -36,7 +34,6 @@ class RemoteAddAccountTests: XCTestCase {
     func test_add_should_complete_with_error_if_client_completes_with_error() {
 
         let (sut, httpClientSpy) = makeSut()
-
         expect(sut, completeWith: .failure(.unexpected)) {
             httpClientSpy.completeWithError(.noConnectivity)
         }
@@ -46,7 +43,6 @@ class RemoteAddAccountTests: XCTestCase {
 
         let (sut, httpClientSpy) = makeSut()
         let expectedAccount = makeAccountModel()
-
         expect(sut, completeWith: .success(expectedAccount)) {
             httpClientSpy.completeWithData(expectedAccount.toData()!)
         }
@@ -56,9 +52,8 @@ class RemoteAddAccountTests: XCTestCase {
     func test_add_should_complete_with_error_if_client_completes_with_invalid_data() {
 
         let (sut, httpClientSpy) = makeSut()
-
         expect(sut, completeWith: .failure(.unexpected)) {
-            httpClientSpy.completeWithData(Data("".utf8))
+            httpClientSpy.completeWithData(makeInvalidData())
         }
     }
 
@@ -72,7 +67,8 @@ extension RemoteAddAccountTests {
         return (sutRemoteAddAccount, httpClientSpy)
     }
 
-    func expect(_ sut: RemoteAddAccount, completeWith expectedResult: Result<AccountModel, DomainError>, when action: () -> Void) {
+    func expect(_ sut: RemoteAddAccount, completeWith expectedResult: Result<AccountModel, DomainError>, when action: () -> Void,
+                file: StaticString = #file, line: UInt = #line) {
 
         let exp = expectation(description: "waiting")
 
@@ -81,18 +77,26 @@ extension RemoteAddAccountTests {
             switch (expectedResult, receivedResult) {
 
                 case (.failure(let expectedError), .failure(let receivedError)):
-                    XCTAssertEqual(expectedError, receivedError)
+                    XCTAssertEqual(expectedError, receivedError, file: file, line: line)
 
                 case (.success(let expectedAccount), .success(let receveidAccount)):
-                    XCTAssertEqual(expectedAccount, receveidAccount)
+                    XCTAssertEqual(expectedAccount, receveidAccount, file: file, line: line)
 
                 default:
-                    XCTFail("Expected \(expectedResult) receive \(receivedResult) instead")
+                    XCTFail("Expected \(expectedResult) receive \(receivedResult) instead", file: file, line: line)
             }
             exp.fulfill()
         }
         action()
         wait(for: [exp], timeout: 1)
+    }
+
+    func makeUrl() -> URL {
+        return URL(string: String("http://any-url.com"))!
+    }
+
+    func makeInvalidData() -> Data {
+        return Data("".utf8)
     }
 
     func makeAddAccountModel() -> AddAccountModel {
