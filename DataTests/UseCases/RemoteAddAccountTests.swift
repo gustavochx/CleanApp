@@ -16,7 +16,7 @@ class RemoteAddAccountTests: XCTestCase {
         let url = makeUrl()
 
         let (sutRemoteAddAccount,httpClientSpy) = makeSut(url: url)
-        sutRemoteAddAccount.add(addAcountModel: makeAddAccountModel()) { _ in
+            sutRemoteAddAccount.add(addAcountModel: makeAddAccountModel()) { _ in
         }
         XCTAssertEqual(httpClientSpy.urls, [url])
     }
@@ -40,7 +40,6 @@ class RemoteAddAccountTests: XCTestCase {
     }
 
     func test_add_should_complete_with_account_if_client_completes_with_valid_data() {
-
         let (sut, httpClientSpy) = makeSut()
         let expectedAccount = makeAccountModel()
         expect(sut, completeWith: .success(expectedAccount)) {
@@ -50,7 +49,6 @@ class RemoteAddAccountTests: XCTestCase {
 
 
     func test_add_should_complete_with_error_if_client_completes_with_invalid_data() {
-
         let (sut, httpClientSpy) = makeSut()
         expect(sut, completeWith: .failure(.unexpected)) {
             httpClientSpy.completeWithData(makeInvalidData())
@@ -61,10 +59,25 @@ class RemoteAddAccountTests: XCTestCase {
 
 extension RemoteAddAccountTests {
 
-    func makeSut(url: URL = URL(string: String("http://any-url.com"))!) -> (sut: RemoteAddAccount, httpClientSpy: HttpClientSpy) {
+    func makeSut(url: URL = URL(string: String("http://any-url.com"))!,
+                 file: StaticString = #file, line: UInt = #line)
+    -> (sut: RemoteAddAccount, httpClientSpy: HttpClientSpy) {
         let httpClientSpy = HttpClientSpy()
         let sutRemoteAddAccount = RemoteAddAccount(url: url, httpClient: httpClientSpy)
+
+        checkMemoryLeak(for: sutRemoteAddAccount, file: file, line: line)
+        checkMemoryLeak(for: httpClientSpy, file: file, line: line)
+
         return (sutRemoteAddAccount, httpClientSpy)
+    }
+
+    func checkMemoryLeak(for instance: AnyObject,
+                         file: StaticString = #file,
+                         line: UInt = #line) {
+
+        addTeardownBlock { [weak instance] in
+            XCTAssertNil(instance, file: file, line: line)
+        }
     }
 
     func expect(_ sut: RemoteAddAccount, completeWith expectedResult: Result<AccountModel, DomainError>, when action: () -> Void,
