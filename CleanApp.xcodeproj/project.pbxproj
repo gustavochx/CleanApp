@@ -19,6 +19,7 @@
 		2BC7984F25EDAF8500461393 /* DomainError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BC7984E25EDAF8500461393 /* DomainError.swift */; };
 		2BC7985725EDB45A00461393 /* HttpError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BC7985625EDB45A00461393 /* HttpError.swift */; };
 		2BD86910261E72BD00DC1A7F /* Data+Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD8690F261E72BC00DC1A7F /* Data+Util.swift */; };
+		2BE1A4AF2725E2190050D61D /* XCTestCase+Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE1A4AE2725E2190050D61D /* XCTestCase+Util.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 		2BC7984E25EDAF8500461393 /* DomainError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainError.swift; sourceTree = "<group>"; };
 		2BC7985625EDB45A00461393 /* HttpError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpError.swift; sourceTree = "<group>"; };
 		2BD8690F261E72BC00DC1A7F /* Data+Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Util.swift"; sourceTree = "<group>"; };
+		2BE1A4AE2725E2190050D61D /* XCTestCase+Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Util.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +145,8 @@
 		2B55266125E5DB4900323440 /* DataTests */ = {
 			isa = PBXGroup;
 			children = (
+				2BE1A4AD2725E2010050D61D /* Extension */,
+				2BE1A4AC2725E1710050D61D /* Helpers */,
 				2BB268B725E7202000E40908 /* UseCases */,
 				2B55266425E5DB4900323440 /* Info.plist */,
 			);
@@ -210,6 +214,21 @@
 			isa = PBXGroup;
 			children = (
 				2BD8690F261E72BC00DC1A7F /* Data+Util.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		2BE1A4AC2725E1710050D61D /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		2BE1A4AD2725E2010050D61D /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				2BE1A4AE2725E2190050D61D /* XCTestCase+Util.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -383,6 +402,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2BE1A4AF2725E2190050D61D /* XCTestCase+Util.swift in Sources */,
 				2B55266325E5DB4900323440 /* RemoteAddAccountTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

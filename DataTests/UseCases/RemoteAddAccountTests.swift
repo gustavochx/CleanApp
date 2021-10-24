@@ -71,14 +71,6 @@ extension RemoteAddAccountTests {
         return (sutRemoteAddAccount, httpClientSpy)
     }
 
-    func checkMemoryLeak(for instance: AnyObject,
-                         file: StaticString = #file,
-                         line: UInt = #line) {
-
-        addTeardownBlock { [weak instance] in
-            XCTAssertNil(instance, file: file, line: line)
-        }
-    }
 
     func expect(_ sut: RemoteAddAccount, completeWith expectedResult: Result<AccountModel, DomainError>, when action: () -> Void,
                 file: StaticString = #file, line: UInt = #line) {
