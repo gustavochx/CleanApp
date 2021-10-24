@@ -8,9 +8,13 @@
 import Foundation
 
 func makeUrl() -> URL {
-    return URL(string: String("http://any-url.com"))!
+    URL(string: String("http://any-url.com"))!
+}
+
+func makeValidData() -> Data {
+    Data("{}".utf8)
 }
 
 func makeInvalidData() -> Data {
-    return Data("".utf8)
+    Data("".utf8)
 }
