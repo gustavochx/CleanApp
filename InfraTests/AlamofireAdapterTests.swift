@@ -23,48 +23,56 @@ class AlamofireAdapter {
 }
 
 class AlamofireAdapterTests: XCTestCase {
-
+    
     func test_post_should_make_request_with_valid_url_and_method() {
-
+        
         let testingUrl = makeUrl()
         
-        let sessionConfiguration = URLSessionConfiguration.default
-        sessionConfiguration.protocolClasses = [UrlProtocolStub.self]
-
-        let sut = AlamofireAdapter(session: Session(configuration: sessionConfiguration))
-        sut.post(to: testingUrl, with: makeValidData())
-        
-        let expectation = expectation(description: "waiting url to be called")
-        
-        UrlProtocolStub.observeRequest { request in
+        testRequest(data: makeValidData(), timeoutExpected: 1.0) { request in
             XCTAssertEqual(testingUrl, request.url)
             XCTAssertEqual(HTTPMethod.post.rawValue, request.httpMethod)
-            XCTAssertNotNil(request.httpBodyStream)
-            expectation.fulfill()
+            XCTAssertNotNil(request.httpBodyStream)    
         }
         
-        wait(for: [expectation], timeout: 1.0)
     }
     
     func test_post_should_make_request_with_empty_body() {
-
-        let testingUrl = makeUrl()
         
+        testRequest(data: makeInvalidData(), timeoutExpected: 1.0) { request in
+            XCTAssertNil(request.httpBodyStream)
+        }
+        
+    }
+    
+}
+
+extension AlamofireAdapterTests {
+    
+    func makeSut() -> AlamofireAdapter {
         let sessionConfiguration = URLSessionConfiguration.default
         sessionConfiguration.protocolClasses = [UrlProtocolStub.self]
-
-        let sut = AlamofireAdapter(session: Session(configuration: sessionConfiguration))
-        sut.post(to: testingUrl, with: nil)
         
+        return AlamofireAdapter(session: Session(configuration: sessionConfiguration))
+    }
+    
+    func testRequest(url: URL = makeUrl(),
+                     data: Data?,
+                     timeoutExpected: TimeInterval,
+                     action: @escaping ((URLRequest) -> Void)) {
+        
+        
+        let sut = makeSut()
+        sut.post(to: url, with: data)
         let expectation = expectation(description: "waiting url to be called")
         
         UrlProtocolStub.observeRequest { request in
-            XCTAssertNil(request.httpBodyStream)
+            action(request)
             expectation.fulfill()
         }
         
-        wait(for: [expectation], timeout: 1.0)
+        wait(for: [expectation], timeout: timeoutExpected)
     }
+    
 }
 
 class UrlProtocolStub: URLProtocol {
