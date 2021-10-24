@@ -106,40 +106,7 @@ extension RemoteAddAccountTests {
         wait(for: [exp], timeout: 1)
     }
 
-    func makeUrl() -> URL {
-        return URL(string: String("http://any-url.com"))!
-    }
-
-    func makeInvalidData() -> Data {
-        return Data("".utf8)
-    }
-
     func makeAddAccountModel() -> AddAccountModel {
         return AddAccountModel(name: "any", email: "any_email@mail.com", password: "any_pass", confirmationPassword: "any_pass")
-    }
-
-    func makeAccountModel() -> AccountModel {
-        return AccountModel(id: "any_id", name: "any", email: "any_email@mail.com", password: "any_pass")
-    }
-
-    class HttpClientSpy: HttpPostClient {
-
-        var urls = [URL]()
-        var data: Data?
-        var completion: ((Result<Data, HttpError>) -> Void)?
-
-        func post(to url: URL, with data: Data?, completion: @escaping (Result<Data, HttpError>) -> Void) {
-            self.urls.append(url)
-            self.data = data
-            self.completion = completion
-        }
-
-        func completeWithError(_ error: HttpError) {
-            completion?(.failure(error))
-        }
-
-        func completeWithData(_ data: Data) {
-            completion?(.success(data))
-        }
     }
 }
