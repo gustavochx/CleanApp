@@ -18,7 +18,7 @@ class AlamofireAdapter {
     
     func post(to url: URL, with data: Data?) {
         let json = data == nil ? nil : try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String: Any]
-        session.request(url, method: .post, parameters: json).resume()
+        session.request(url, method: .post, parameters: json, encoding: JSONEncoding.default).resume()
     }
 }
 
@@ -32,27 +32,25 @@ class AlamofireAdapterTests: XCTestCase {
             XCTAssertEqual(testingUrl, request.url)
             XCTAssertEqual(HTTPMethod.post.rawValue, request.httpMethod)
             XCTAssertNotNil(request.httpBodyStream)    
-        }
-        
+        }        
     }
     
     func test_post_should_make_request_with_empty_body() {
-        
         testRequest(data: makeInvalidData(), timeoutExpected: 1.0) { request in
             XCTAssertNil(request.httpBodyStream)
         }
-        
     }
     
 }
 
 extension AlamofireAdapterTests {
     
-    func makeSut() -> AlamofireAdapter {
+    func makeSut(file: StaticString = #filePath, line: UInt = #line) -> AlamofireAdapter {
         let sessionConfiguration = URLSessionConfiguration.default
         sessionConfiguration.protocolClasses = [UrlProtocolStub.self]
-        
-        return AlamofireAdapter(session: Session(configuration: sessionConfiguration))
+        let sut = AlamofireAdapter(session: Session(configuration: sessionConfiguration))
+        checkMemoryLeak(for: sut, file: file, line: line)
+        return sut
     }
     
     func testRequest(url: URL = makeUrl(),

@@ -17,6 +17,7 @@
 		2BAECDE32725F61300D968F4 /* AlamofireAdapterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BAECDE22725F61300D968F4 /* AlamofireAdapterTests.swift */; };
 		2BAECDED2725F66200D968F4 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 2BAECDEC2725F66200D968F4 /* Alamofire */; };
 		2BAECDEE2725F72C00D968F4 /* TestFactories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE1A4B02725E40B0050D61D /* TestFactories.swift */; };
+		2BAECDF027260AAF00D968F4 /* XCTestCase+Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE1A4AE2725E2190050D61D /* XCTestCase+Util.swift */; };
 		2BB2689C25E71DA100E40908 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB2689B25E71DA100E40908 /* Model.swift */; };
 		2BB268A425E71EA100E40908 /* HttpPostClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB268A325E71EA100E40908 /* HttpPostClient.swift */; };
 		2BB268AE25E71F8B00E40908 /* RemoteAddAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB268AD25E71F8B00E40908 /* RemoteAddAccount.swift */; };
@@ -560,6 +561,7 @@
 			files = (
 				2BAECDEE2725F72C00D968F4 /* TestFactories.swift in Sources */,
 				2BAECDE32725F61300D968F4 /* AlamofireAdapterTests.swift in Sources */,
+				2BAECDF027260AAF00D968F4 /* XCTestCase+Util.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
