@@ -64,8 +64,4 @@ class UrlProtocolStub: URLProtocol {
     override func startLoading() {
         UrlProtocolStub.emit?(request)
     }
-    
-    override func stopLoading() {
-        
-    }
 }
