@@ -33,10 +33,25 @@ class AlamofireAdapterTests: XCTestCase {
         let sut = AlamofireAdapter(session: Session(configuration: sessionConfiguration))
         sut.post(to: testingUrl)
         
+        let expectation = expectation(description: "waiting url to be called")
+        
+        UrlProtocolStub.observeRequest { request in
+            XCTAssertEqual(testingUrl, request.url)
+            XCTAssertEqual(HTTPMethod.get.rawValue, request.httpMethod)
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 1.0)
     }
 }
 
 class UrlProtocolStub: URLProtocol {
+    
+    static var emit: ((URLRequest) -> Void)?
+    
+    static func observeRequest(completion: @escaping (URLRequest) -> Void) {
+        UrlProtocolStub.emit = completion
+    }
     
     override class func canInit(with request: URLRequest) -> Bool {
         true
@@ -47,7 +62,7 @@ class UrlProtocolStub: URLProtocol {
     }
     
     override func startLoading() {
-        
+        UrlProtocolStub.emit?(request)
     }
     
     override func stopLoading() {
