@@ -17,7 +17,7 @@ class AlamofireAdapter {
     }
     
     func post(to url: URL) {
-        session.request(url).resume()
+        session.request(url, method: .post).resume()
     }
 }
 
@@ -37,7 +37,7 @@ class AlamofireAdapterTests: XCTestCase {
         
         UrlProtocolStub.observeRequest { request in
             XCTAssertEqual(testingUrl, request.url)
-            XCTAssertEqual(HTTPMethod.get.rawValue, request.httpMethod)
+            XCTAssertEqual(HTTPMethod.post.rawValue, request.httpMethod)
             expectation.fulfill()
         }
         
@@ -64,4 +64,6 @@ class UrlProtocolStub: URLProtocol {
     override func startLoading() {
         UrlProtocolStub.emit?(request)
     }
+    
+    override func stopLoading() {}
 }
