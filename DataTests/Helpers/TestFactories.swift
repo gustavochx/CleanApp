@@ -12,7 +12,7 @@ func makeUrl() -> URL {
 }
 
 func makeValidData() -> Data {
-    Data("{}".utf8)
+    Data("{\"name\":\"Gustavo\"}".utf8)
 }
 
 func makeInvalidData() -> Data {

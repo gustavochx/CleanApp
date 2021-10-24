@@ -16,8 +16,9 @@ class AlamofireAdapter {
         self.session = session
     }
     
-    func post(to url: URL) {
-        session.request(url, method: .post).resume()
+    func post(to url: URL, with data: Data?) {
+        let json = data == nil ? nil : try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String: Any]
+        session.request(url, method: .post, parameters: json).resume()
     }
 }
 
@@ -31,13 +32,34 @@ class AlamofireAdapterTests: XCTestCase {
         sessionConfiguration.protocolClasses = [UrlProtocolStub.self]
 
         let sut = AlamofireAdapter(session: Session(configuration: sessionConfiguration))
-        sut.post(to: testingUrl)
+        sut.post(to: testingUrl, with: makeValidData())
         
         let expectation = expectation(description: "waiting url to be called")
         
         UrlProtocolStub.observeRequest { request in
             XCTAssertEqual(testingUrl, request.url)
             XCTAssertEqual(HTTPMethod.post.rawValue, request.httpMethod)
+            XCTAssertNotNil(request.httpBodyStream)
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 1.0)
+    }
+    
+    func test_post_should_make_request_with_empty_body() {
+
+        let testingUrl = makeUrl()
+        
+        let sessionConfiguration = URLSessionConfiguration.default
+        sessionConfiguration.protocolClasses = [UrlProtocolStub.self]
+
+        let sut = AlamofireAdapter(session: Session(configuration: sessionConfiguration))
+        sut.post(to: testingUrl, with: nil)
+        
+        let expectation = expectation(description: "waiting url to be called")
+        
+        UrlProtocolStub.observeRequest { request in
+            XCTAssertNil(request.httpBodyStream)
             expectation.fulfill()
         }
         
