@@ -19,6 +19,10 @@ func makeInvalidData() -> Data {
     Data("".utf8)
 }
 
+func makeEmptyData() -> Data {
+    Data()
+}
+
 func makeHttpResponse(statusCode: Int = 200) -> HTTPURLResponse {
     HTTPURLResponse(url: makeUrl(), statusCode: statusCode, httpVersion: nil, headerFields: nil)!
 }

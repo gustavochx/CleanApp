@@ -9,7 +9,7 @@ import XCTest
 import Alamofire
 import Data
 
-class AlamofireAdapter {
+class AlamofireAdapter: HttpPostClient {
     
     private let session: Session
     
@@ -27,13 +27,23 @@ class AlamofireAdapter {
             switch dataResponse.result {
             case .failure: completion(.failure(.noConnectivity))
             case .success(let data):
-                completion(.success(data))
-//                switch statusCode {
-//                case 204:
-//                case 200...299:
-//                case 401:
-//                case 400...499:
-//                }
+                switch statusCode {
+                    
+                case 204:
+                    completion(.success(nil))
+                case 200...299:
+                    completion(.success(data))
+                case 401:
+                    completion(.failure(.unauthorized))
+                case 403:
+                    completion(.failure(.forbidden))
+                case 400...499:
+                    completion(.failure(.badRequest))
+                case 500...599:
+                    completion(.failure(.serverError))
+                default:
+                    completion(.failure(.noConnectivity))
+                }
             }
         }
     }
@@ -70,7 +80,24 @@ class AlamofireAdapterTests: XCTestCase {
         expect(expectedResult: .failure(.noConnectivity), when: (data: nil, response: makeHttpResponse(), error: nil))
         expect(expectedResult: .failure(.noConnectivity), when: (data: nil, response: nil, error: nil))
     }
+        
+    func test_post_should_complete_with_error_when_request_completes_without_success() {
+        expect(expectedResult: .failure(.badRequest), when: (data: makeValidData(), response: makeHttpResponse(statusCode: 400), error: nil))
+        expect(expectedResult: .failure(.unauthorized), when: (data: makeValidData(), response: makeHttpResponse(statusCode: 401), error: nil))
+        expect(expectedResult: .failure(.forbidden), when: (data: makeValidData(), response: makeHttpResponse(statusCode: 403), error: nil))
+        expect(expectedResult: .failure(.serverError), when: (data: makeValidData(), response: makeHttpResponse(statusCode: 500), error: nil))
+        expect(expectedResult: .failure(.serverError), when: (data: makeValidData(), response: makeHttpResponse(statusCode: 550), error: nil))
+    }
     
+    func test_post_should_complete_with_data_when_request_completes_with_success() {
+        expect(expectedResult: .success(makeValidData()), when: (data: makeValidData(), response: makeHttpResponse(), error: nil))
+    }
+    
+    func test_post_should_complete_with_data_when_request_completes_with_created() {
+        expect(expectedResult: .success(nil), when: (data: nil, response: makeHttpResponse(statusCode: 204), error: nil))
+        expect(expectedResult: .success(nil), when: (data: makeValidData(), response: makeHttpResponse(statusCode: 204), error: nil))
+        expect(expectedResult: .success(nil), when: (data: makeEmptyData(), response: makeHttpResponse(statusCode: 204), error: nil))
+    }
 }
 
 extension AlamofireAdapterTests {
