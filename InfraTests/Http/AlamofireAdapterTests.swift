@@ -47,6 +47,8 @@ class AlamofireAdapterTests: XCTestCase {
         expect(expectedResult: .failure(.forbidden), when: (data: makeValidData(), response: makeHttpResponse(statusCode: 403), error: nil))
         expect(expectedResult: .failure(.serverError), when: (data: makeValidData(), response: makeHttpResponse(statusCode: 500), error: nil))
         expect(expectedResult: .failure(.serverError), when: (data: makeValidData(), response: makeHttpResponse(statusCode: 550), error: nil))
+        expect(expectedResult: .failure(.noConnectivity), when: (data: makeValidData(), response: makeHttpResponse(statusCode: 100), error: nil))
+        expect(expectedResult: .failure(.noConnectivity), when: (data: makeValidData(), response: makeHttpResponse(statusCode: 300), error: nil))
     }
 
     func test_post_should_complete_with_data_when_request_completes_with_success() {
