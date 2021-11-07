@@ -16,13 +16,22 @@ class SignUpPresenter {
     }
     
     func signUp(viewModel: SignUpViewModel) {
-        
+        if let message = validate(viewModel: viewModel) {
+            alertView.showMessage(viewModel: AlertViewModel(title: "Error on validation", message: message))
+        }
+    }
+    
+    private func validate(viewModel: SignUpViewModel) -> String? {
         if viewModel.name == nil || viewModel.name!.isEmpty {
-            alertView.showMessage(viewModel: AlertViewModel(title: "Error on validation", message: "Empty name"))
+            return "Empty name"
         } else if viewModel.email == nil || viewModel.email!.isEmpty {
-            alertView.showMessage(viewModel: AlertViewModel(title: "Error on validation", message: "Empty email"))
+            return "Empty email"
         } else if viewModel.password == nil || viewModel.password!.isEmpty {
-            alertView.showMessage(viewModel: AlertViewModel(title: "Error on validation", message: "Empty password"))
+            return "Empty password"
+        } else if viewModel.passwordConfirmation == nil || viewModel.passwordConfirmation!.isEmpty {
+            return "Empty password confirmation"
+        } else {
+            return nil
         }
     }
     
@@ -67,6 +76,15 @@ class SignUpPresenterTests: XCTestCase {
         sut.signUp(viewModel: signUpViewModel)
         XCTAssertEqual(alertViewSpy.viewModel, AlertViewModel(title: "Error on validation", message: "Empty password"))
     }
+    
+    func test_signUp_showErrorMessage_forPasswordConfirmationNotProvided() {
+        let (sut, alertViewSpy) = makeSut()
+        let signUpViewModel = SignUpViewModel(name: "Dummy", email: "dummy@email", password: "dummy", passwordConfirmation: nil)
+        sut.signUp(viewModel: signUpViewModel)
+        XCTAssertEqual(alertViewSpy.viewModel, AlertViewModel(title: "Error on validation", message: "Empty password confirmation"))
+    }
+    
+    
 }
 
 
