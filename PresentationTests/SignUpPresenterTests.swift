@@ -16,8 +16,13 @@ class SignUpPresenter {
     }
     
     func signUp(viewModel: SignUpViewModel) {
+        
         if viewModel.name == nil || viewModel.name!.isEmpty {
             alertView.showMessage(viewModel: AlertViewModel(title: "Error on validation", message: "Empty name"))
+        } else if viewModel.email == nil || viewModel.email!.isEmpty {
+            alertView.showMessage(viewModel: AlertViewModel(title: "Error on validation", message: "Empty email"))
+        } else if viewModel.password == nil || viewModel.password!.isEmpty {
+            alertView.showMessage(viewModel: AlertViewModel(title: "Error on validation", message: "Empty password"))
         }
     }
     
@@ -42,11 +47,25 @@ struct SignUpViewModel {
 
 class SignUpPresenterTests: XCTestCase {
 
-    func test_signUp_showingErrorMessage_forNameNotProvided() {
+    func test_signUp_showErrorMessage_forNameNotProvided() {
         let (sut, alertViewSpy) = makeSut()
         let signUpViewModel = SignUpViewModel(name: nil, email: "dummy@email", password: "dummy", passwordConfirmation: "dummy")
         sut.signUp(viewModel: signUpViewModel)
         XCTAssertEqual(alertViewSpy.viewModel, AlertViewModel(title: "Error on validation", message: "Empty name"))
+    }
+    
+    func test_signUp_showErrorMessage_forEmailNotProvided() {
+        let (sut, alertViewSpy) = makeSut()
+        let signUpViewModel = SignUpViewModel(name: "Dummy", email: nil, password: "dummy", passwordConfirmation: "dummy")
+        sut.signUp(viewModel: signUpViewModel)
+        XCTAssertEqual(alertViewSpy.viewModel, AlertViewModel(title: "Error on validation", message: "Empty email"))
+    }
+    
+    func test_signUp_showErrorMessage_forPasswordNotProvided() {
+        let (sut, alertViewSpy) = makeSut()
+        let signUpViewModel = SignUpViewModel(name: "Dummy", email: "dummy@email", password: nil, passwordConfirmation: "dummy")
+        sut.signUp(viewModel: signUpViewModel)
+        XCTAssertEqual(alertViewSpy.viewModel, AlertViewModel(title: "Error on validation", message: "Empty password"))
     }
 }
 
