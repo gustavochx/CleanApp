@@ -7,26 +7,64 @@
 
 import XCTest
 
-class SignUpPresenterTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+class SignUpPresenter {
+    
+    private let alertView: AlertView
+    
+    init(alertView: AlertView) {
+        self.alertView = alertView
     }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    
+    func signUp(viewModel: SignUpViewModel) {
+        if viewModel.name == nil || viewModel.name!.isEmpty {
+            alertView.showMessage(viewModel: AlertViewModel(title: "Error on validation", message: "Empty name"))
         }
     }
+    
+}
 
+protocol AlertView {
+    func showMessage(viewModel: AlertViewModel)
+}
+
+struct AlertViewModel: Equatable {
+    var title: String
+    var message: String
+}
+
+
+struct SignUpViewModel {
+    var name: String?
+    var email: String?
+    var password: String?
+    var passwordConfirmation: String?
+}
+
+class SignUpPresenterTests: XCTestCase {
+
+    func test_signUp_showingErrorMessage_forNameNotProvided() {
+        let (sut, alertViewSpy) = makeSut()
+        let signUpViewModel = SignUpViewModel(name: nil, email: "dummy@email", password: "dummy", passwordConfirmation: "dummy")
+        sut.signUp(viewModel: signUpViewModel)
+        XCTAssertEqual(alertViewSpy.viewModel, AlertViewModel(title: "Error on validation", message: "Empty name"))
+    }
+}
+
+
+extension SignUpPresenterTests {
+    
+    func makeSut() -> (sut: SignUpPresenter, alertViewSpy: AlertViewSpy) {
+        let alertViewSpy = AlertViewSpy()
+        let sut = SignUpPresenter(alertView: alertViewSpy)
+        return (sut: sut, alertViewSpy: alertViewSpy)
+    }
+    
+    class AlertViewSpy: AlertView {
+        
+        var viewModel: AlertViewModel?
+        
+        func showMessage(viewModel: AlertViewModel) {
+            self.viewModel = viewModel
+        }
+    }
 }
