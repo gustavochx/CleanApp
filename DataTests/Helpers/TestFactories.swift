@@ -8,9 +8,25 @@
 import Foundation
 
 func makeUrl() -> URL {
-    return URL(string: String("http://any-url.com"))!
+    URL(string: String("http://any-url.com"))!
+}
+
+func makeValidData() -> Data {
+    Data("{\"name\":\"Gustavo\"}".utf8)
 }
 
 func makeInvalidData() -> Data {
-    return Data("".utf8)
+    Data("".utf8)
+}
+
+func makeEmptyData() -> Data {
+    Data()
+}
+
+func makeHttpResponse(statusCode: Int = 200) -> HTTPURLResponse {
+    HTTPURLResponse(url: makeUrl(), statusCode: statusCode, httpVersion: nil, headerFields: nil)!
+}
+
+func makeError() -> Error {
+    NSError.init(domain: "any-error", code: 0)
 }
