@@ -31,12 +31,14 @@ public final class SignUpPresenter {
     private let alertView: AlertView
     private let emailValidator: EmailValidator
     private let addAcount: AddAccount
+    private let loadingView: LoadingView
     
     // MARK: Lifecycle
-    init(alertView: AlertView, emailValidator: EmailValidator, addAccount: AddAccount) {
+    init(alertView: AlertView, emailValidator: EmailValidator, addAccount: AddAccount, loadingView: LoadingView) {
         self.alertView = alertView
         self.emailValidator = emailValidator
         self.addAcount = addAccount
+        self.loadingView = loadingView
     }
     
     // MARK: Methods
@@ -44,7 +46,10 @@ public final class SignUpPresenter {
         if let message = validate(viewModel: viewModel) {
             alertView.showMessage(viewModel: AlertViewModel(title: "Error on validation", message: message))
         } else {
+     
+            
             let addAccount = AddAccountModel(name: viewModel.name!, email: viewModel.email!, password: viewModel.password!, confirmationPassword: viewModel.passwordConfirmation!)
+            loadingView.display(viewModel: LoadingViewModel(isLoading: true))
             addAcount.add(addAccountModel: addAccount) { [weak self] result in
                 
                 switch result {
@@ -71,7 +76,6 @@ public final class SignUpPresenter {
         } else if !emailValidator.isValid(email: viewModel.email!) {
             return "Email is invalid"
         }
-        
         return nil
     }
     

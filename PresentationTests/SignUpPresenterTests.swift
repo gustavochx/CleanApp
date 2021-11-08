@@ -129,14 +129,29 @@ class SignUpPresenterTests: XCTestCase {
         addAccountSpy.completeWithError(.unexpected)
         wait(for: [expectation], timeout: 1)
     }
+    
+    func test_signUp_shouldShowLoading_beforeCallAddAccount() {
+        
+        let loadingViewSpy = LoadingViewSpy()
+        let sut = makeSut(loadingViewSpy: loadingViewSpy)
+        
+        sut.signUp(viewModel: makeSignUpViewModel())
+        
+        XCTAssertEqual(loadingViewSpy.viewModel, LoadingViewModel(isLoading: true))
+        
+    }
 }
 
 
 extension SignUpPresenterTests {
     
-    func makeSut(alertViewSpy: AlertViewSpy = AlertViewSpy(), emailValidatorSpy: EmailValidatorSpy = EmailValidatorSpy(), addAcountSpy: AddAccountSpy = AddAccountSpy(),
+    func makeSut(alertViewSpy: AlertViewSpy = AlertViewSpy(),
+                 emailValidatorSpy: EmailValidatorSpy = EmailValidatorSpy(),
+                 addAcountSpy: AddAccountSpy = AddAccountSpy(),
+                 loadingViewSpy: LoadingViewSpy = LoadingViewSpy(),
                  file: StaticString = #file, line: UInt = #line) -> SignUpPresenter {
-        let sut = SignUpPresenter(alertView: alertViewSpy, emailValidator: emailValidatorSpy, addAccount: addAcountSpy)
+       
+        let sut = SignUpPresenter(alertView: alertViewSpy, emailValidator: emailValidatorSpy, addAccount: addAcountSpy, loadingView: loadingViewSpy)
         checkMemoryLeak(for: sut, file: file, line: line)
         return sut
     }
@@ -147,6 +162,15 @@ extension SignUpPresenterTests {
     
     func makeRequiredAlertViewModel(message: String) -> AlertViewModel {
         AlertViewModel(title: "Error on validation", message: message)
+    }
+    
+    
+    final class LoadingViewSpy: LoadingView {
+        var viewModel: LoadingViewModel?
+        
+        func display(viewModel: LoadingViewModel) {
+            self.viewModel = viewModel
+        }
     }
     
     final class AddAccountSpy: AddAccount {
