@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol AddAccount {
-    func add(addAccountModel: AddAccountModel, completionHandler: @escaping (Result<AccountModel, Error>) -> Void)
+    func add(addAccountModel: AddAccountModel, completionHandler: @escaping (Result<AccountModel, DomainError>) -> Void)
 }
 
 public struct AddAccountModel: Model {

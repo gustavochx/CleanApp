@@ -66,11 +66,21 @@ class SignUpPresenterTests: XCTestCase {
     }
     
     func test_signUp_shouldCallAddAccount_withCorrectValues() {
-        
         let addAccountSpy = AddAccountSpy()
         let sut = makeSut(addAcountSpy: addAccountSpy)
         sut.signUp(viewModel: makeSignUpViewModel())
         XCTAssertEqual(addAccountSpy.addAccountModel, makeAddAccountModel())
+    }
+    
+    func test_signUp_shouldShowError_whenAddAccountFails() {
+        let addAccountSpy = AddAccountSpy()
+        let alertViewSpy = AlertViewSpy()
+        let sut = makeSut(alertViewSpy: alertViewSpy, addAcountSpy: addAccountSpy)
+        
+        sut.signUp(viewModel: makeSignUpViewModel())
+        addAccountSpy.completeWithError(.unexpected)
+        
+        XCTAssertEqual(alertViewSpy.viewModel, makeRequiredAlertViewModel(message: "Error on addAccount"))
     }
 }
 
@@ -92,9 +102,15 @@ extension SignUpPresenterTests {
     final class AddAccountSpy: AddAccount {
         
         var addAccountModel: AddAccountModel?
+        var completion: ((Result<AccountModel, DomainError>) -> Void)?
         
-        func add(addAccountModel: AddAccountModel, completionHandler: @escaping (Result<AccountModel, Error>) -> Void) {
+        func add(addAccountModel: AddAccountModel, completionHandler: @escaping (Result<AccountModel, DomainError>) -> Void) {
             self.addAccountModel = addAccountModel
+            self.completion = completionHandler
+        }
+        
+        func completeWithError(_ error: DomainError) {
+            completion?(.failure(error))
         }
     }
     

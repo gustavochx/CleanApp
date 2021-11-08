@@ -45,7 +45,15 @@ public final class SignUpPresenter {
             alertView.showMessage(viewModel: AlertViewModel(title: "Error on validation", message: message))
         } else {
             let addAccount = AddAccountModel(name: viewModel.name!, email: viewModel.email!, password: viewModel.password!, confirmationPassword: viewModel.passwordConfirmation!)
-            addAcount.add(addAccountModel: addAccount) { [weak self] _ in }
+            addAcount.add(addAccountModel: addAccount) { [weak self] result in
+                
+                switch result {
+                case .failure:
+                    self?.alertView.showMessage(viewModel: AlertViewModel(title: "Error on validation", message: "Error on addAccount"))
+                case .success: break
+                }
+                
+            }
         }
     }
     
