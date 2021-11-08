@@ -55,9 +55,10 @@ public final class SignUpPresenter {
                 switch result {
                 case .failure:
                     self?.alertView.showMessage(viewModel: AlertViewModel(title: "Error on validation", message: "Error on addAccount"))
-                case .success:
-                    break
+                case .success: break
                 }
+                
+                self?.loadingView.display(viewModel: LoadingViewModel(isLoading: false))
             }
         }
     }
