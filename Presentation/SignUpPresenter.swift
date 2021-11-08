@@ -30,17 +30,22 @@ public final class SignUpPresenter {
     // MARK: Private variables
     private let alertView: AlertView
     private let emailValidator: EmailValidator
+    private let addAcount: AddAccount
     
     // MARK: Lifecycle
-    init(alertView: AlertView, emailValidator: EmailValidator) {
+    init(alertView: AlertView, emailValidator: EmailValidator, addAccount: AddAccount) {
         self.alertView = alertView
         self.emailValidator = emailValidator
+        self.addAcount = addAccount
     }
     
     // MARK: Methods
     func signUp(viewModel: SignUpViewModel) {
         if let message = validate(viewModel: viewModel) {
             alertView.showMessage(viewModel: AlertViewModel(title: "Error on validation", message: message))
+        } else {
+            let addAccount = AddAccountModel(name: viewModel.name!, email: viewModel.email!, password: viewModel.password!, confirmationPassword: viewModel.passwordConfirmation!)
+            addAcount.add(addAccountModel: addAccount) { [weak self] _ in }
         }
     }
     

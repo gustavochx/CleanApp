@@ -6,6 +6,7 @@
 //
 
 import XCTest
+import Domain
 
 @testable import Presentation
 
@@ -54,7 +55,6 @@ class SignUpPresenterTests: XCTestCase {
         XCTAssertEqual(emailValidatorSpy.email, signUpViewModel.email)
     }
     
-    
     func test_signUp_showErrorMessage_whenInvalidEmailProvided() {
         let alertViewSpy = AlertViewSpy()
         let emailValidatorSpy = EmailValidatorSpy()
@@ -64,13 +64,21 @@ class SignUpPresenterTests: XCTestCase {
         sut.signUp(viewModel: signUpViewModel)
         XCTAssertEqual(alertViewSpy.viewModel, makeRequiredAlertViewModel(message: "Email is invalid"))
     }
+    
+    func test_signUp_shouldCallAddAccount_withCorrectValues() {
+        
+        let addAccountSpy = AddAccountSpy()
+        let sut = makeSut(addAcountSpy: addAccountSpy)
+        sut.signUp(viewModel: makeSignUpViewModel())
+        XCTAssertEqual(addAccountSpy.addAccountModel, makeAddAccountModel())
+    }
 }
 
 
 extension SignUpPresenterTests {
     
-    func makeSut(alertViewSpy: AlertViewSpy = AlertViewSpy(), emailValidatorSpy: EmailValidatorSpy = EmailValidatorSpy()) -> SignUpPresenter {
-        SignUpPresenter(alertView: alertViewSpy, emailValidator: emailValidatorSpy)
+    func makeSut(alertViewSpy: AlertViewSpy = AlertViewSpy(), emailValidatorSpy: EmailValidatorSpy = EmailValidatorSpy(), addAcountSpy: AddAccountSpy = AddAccountSpy()) -> SignUpPresenter {
+        SignUpPresenter(alertView: alertViewSpy, emailValidator: emailValidatorSpy, addAccount: addAcountSpy)
     }
     
     func makeSignUpViewModel(name: String? = "Dummy", email: String? = "dummy@email.com", password: String? = "dummy", passwordConfirmation: String? = "dummy") -> SignUpViewModel {
@@ -79,6 +87,15 @@ extension SignUpPresenterTests {
     
     func makeRequiredAlertViewModel(message: String) -> AlertViewModel {
         AlertViewModel(title: "Error on validation", message: message)
+    }
+    
+    final class AddAccountSpy: AddAccount {
+        
+        var addAccountModel: AddAccountModel?
+        
+        func add(addAccountModel: AddAccountModel, completionHandler: @escaping (Result<AccountModel, Error>) -> Void) {
+            self.addAccountModel = addAccountModel
+        }
     }
     
     final class EmailValidatorSpy: EmailValidator {
