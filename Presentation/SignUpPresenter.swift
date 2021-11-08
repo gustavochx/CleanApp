@@ -35,6 +35,7 @@ public final class SignUpPresenter {
     
     // MARK: Lifecycle
     init(alertView: AlertView, emailValidator: EmailValidator, addAccount: AddAccount, loadingView: LoadingView) {
+        
         self.alertView = alertView
         self.emailValidator = emailValidator
         self.addAcount = addAccount
@@ -43,11 +44,10 @@ public final class SignUpPresenter {
     
     // MARK: Methods
     func signUp(viewModel: SignUpViewModel) {
+        
         if let message = validate(viewModel: viewModel) {
             alertView.showMessage(viewModel: AlertViewModel(title: "Error on validation", message: message))
         } else {
-     
-            
             let addAccount = AddAccountModel(name: viewModel.name!, email: viewModel.email!, password: viewModel.password!, confirmationPassword: viewModel.passwordConfirmation!)
             loadingView.display(viewModel: LoadingViewModel(isLoading: true))
             addAcount.add(addAccountModel: addAccount) { [weak self] result in
@@ -55,14 +55,15 @@ public final class SignUpPresenter {
                 switch result {
                 case .failure:
                     self?.alertView.showMessage(viewModel: AlertViewModel(title: "Error on validation", message: "Error on addAccount"))
-                case .success: break
+                case .success:
+                    break
                 }
-                
             }
         }
     }
     
     private func validate(viewModel: SignUpViewModel) -> String? {
+        
         if viewModel.name == nil || viewModel.name!.isEmpty {
             return "Empty name"
         } else if viewModel.email == nil || viewModel.email!.isEmpty {
