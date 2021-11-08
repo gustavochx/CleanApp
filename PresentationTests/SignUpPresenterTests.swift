@@ -7,52 +7,7 @@
 
 import XCTest
 
-class SignUpPresenter {
-    
-    private let alertView: AlertView
-    
-    init(alertView: AlertView) {
-        self.alertView = alertView
-    }
-    
-    func signUp(viewModel: SignUpViewModel) {
-        if let message = validate(viewModel: viewModel) {
-            alertView.showMessage(viewModel: AlertViewModel(title: "Error on validation", message: message))
-        }
-    }
-    
-    private func validate(viewModel: SignUpViewModel) -> String? {
-        if viewModel.name == nil || viewModel.name!.isEmpty {
-            return "Empty name"
-        } else if viewModel.email == nil || viewModel.email!.isEmpty {
-            return "Empty email"
-        } else if viewModel.password == nil || viewModel.password!.isEmpty {
-            return "Empty password"
-        } else if viewModel.passwordConfirmation == nil || viewModel.passwordConfirmation!.isEmpty {
-            return "Empty password confirmation"
-        } else {
-            return nil
-        }
-    }
-    
-}
-
-protocol AlertView {
-    func showMessage(viewModel: AlertViewModel)
-}
-
-struct AlertViewModel: Equatable {
-    var title: String
-    var message: String
-}
-
-
-struct SignUpViewModel {
-    var name: String?
-    var email: String?
-    var password: String?
-    var passwordConfirmation: String?
-}
+@testable import Presentation
 
 class SignUpPresenterTests: XCTestCase {
 
@@ -83,8 +38,6 @@ class SignUpPresenterTests: XCTestCase {
         sut.signUp(viewModel: signUpViewModel)
         XCTAssertEqual(alertViewSpy.viewModel, AlertViewModel(title: "Error on validation", message: "Empty password confirmation"))
     }
-    
-    
 }
 
 
