@@ -51,6 +51,8 @@ public final class SignUpPresenter {
             return "Empty password"
         } else if viewModel.passwordConfirmation == nil || viewModel.passwordConfirmation!.isEmpty {
             return "Empty password confirmation"
+        } else if viewModel.password != viewModel.passwordConfirmation {
+            return "Password confirmation is wrong then password"
         } else {
             return nil
         }

@@ -11,32 +11,39 @@ import XCTest
 
 class SignUpPresenterTests: XCTestCase {
 
-    func test_signUp_showErrorMessage_forNameNotProvided() {
+    func test_signUp_showErrorMessage_whenNameNotProvided() {
         let (sut, alertViewSpy) = makeSut()
         let signUpViewModel = SignUpViewModel(name: nil, email: "dummy@email", password: "dummy", passwordConfirmation: "dummy")
         sut.signUp(viewModel: signUpViewModel)
         XCTAssertEqual(alertViewSpy.viewModel, AlertViewModel(title: "Error on validation", message: "Empty name"))
     }
     
-    func test_signUp_showErrorMessage_forEmailNotProvided() {
+    func test_signUp_showErrorMessage_whenEmailNotProvided() {
         let (sut, alertViewSpy) = makeSut()
         let signUpViewModel = SignUpViewModel(name: "Dummy", email: nil, password: "dummy", passwordConfirmation: "dummy")
         sut.signUp(viewModel: signUpViewModel)
         XCTAssertEqual(alertViewSpy.viewModel, AlertViewModel(title: "Error on validation", message: "Empty email"))
     }
     
-    func test_signUp_showErrorMessage_forPasswordNotProvided() {
+    func test_signUp_showErrorMessage_whenPasswordNotProvided() {
         let (sut, alertViewSpy) = makeSut()
         let signUpViewModel = SignUpViewModel(name: "Dummy", email: "dummy@email", password: nil, passwordConfirmation: "dummy")
         sut.signUp(viewModel: signUpViewModel)
         XCTAssertEqual(alertViewSpy.viewModel, AlertViewModel(title: "Error on validation", message: "Empty password"))
     }
     
-    func test_signUp_showErrorMessage_forPasswordConfirmationNotProvided() {
+    func test_signUp_showErrorMessage_whenPasswordConfirmationNotProvided() {
         let (sut, alertViewSpy) = makeSut()
         let signUpViewModel = SignUpViewModel(name: "Dummy", email: "dummy@email", password: "dummy", passwordConfirmation: nil)
         sut.signUp(viewModel: signUpViewModel)
         XCTAssertEqual(alertViewSpy.viewModel, AlertViewModel(title: "Error on validation", message: "Empty password confirmation"))
+    }
+    
+    func test_signUp_showErrorMessage_whenPasswordConfirmationIsDiferentFromPassword() {
+        let (sut, alertViewSpy) = makeSut()
+        let signUpViewModel = SignUpViewModel(name: "Dummy", email: "dummy@email", password: "dummy", passwordConfirmation: "secret")
+        sut.signUp(viewModel: signUpViewModel)
+        XCTAssertEqual(alertViewSpy.viewModel, AlertViewModel(title: "Error on validation", message: "Password confirmation is wrong then password"))
     }
 }
 
