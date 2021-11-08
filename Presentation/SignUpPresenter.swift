@@ -30,12 +30,17 @@ public struct SignUpViewModel {
 
 public final class SignUpPresenter {
     
+    // MARK: Private variables
     private let alertView: AlertView
+    private let emailValidator: EmailValidator
     
-    init(alertView: AlertView) {
+    // MARK: Lifecycle
+    init(alertView: AlertView, emailValidator: EmailValidator) {
         self.alertView = alertView
+        self.emailValidator = emailValidator
     }
     
+    // MARK: Methods
     func signUp(viewModel: SignUpViewModel) {
         if let message = validate(viewModel: viewModel) {
             alertView.showMessage(viewModel: AlertViewModel(title: "Error on validation", message: message))
@@ -53,9 +58,10 @@ public final class SignUpPresenter {
             return "Empty password confirmation"
         } else if viewModel.password != viewModel.passwordConfirmation {
             return "Password confirmation is wrong then password"
-        } else {
-            return nil
         }
+        
+        _ = emailValidator.isValid(email: viewModel.email!)
+        return nil
     }
     
 }
