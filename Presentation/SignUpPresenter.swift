@@ -9,23 +9,20 @@ import Foundation
 import Domain
 
 public struct SignUpViewModel {
- 
-   // MARK: Public variables
     
-   public var name: String?
-   public var email: String?
-   public var password: String?
-   public var passwordConfirmation: String?
-
-   // MARK: Constructor
+    // MARK: Public variables
+    public var name: String?
+    public var email: String?
+    public var password: String?
+    public var passwordConfirmation: String?
     
+    // MARK: Constructor
     public init(name: String? = nil, email: String? = nil, password: String? = nil, passwordConfirmation: String? = nil) {
         self.name = name
         self.email = email
         self.password = password
         self.passwordConfirmation = passwordConfirmation
     }
-
 }
 
 public final class SignUpPresenter {
@@ -58,9 +55,10 @@ public final class SignUpPresenter {
             return "Empty password confirmation"
         } else if viewModel.password != viewModel.passwordConfirmation {
             return "Password confirmation is wrong then password"
+        } else if !emailValidator.isValid(email: viewModel.email!) {
+            return "Email is invalid"
         }
         
-        _ = emailValidator.isValid(email: viewModel.email!)
         return nil
     }
     
